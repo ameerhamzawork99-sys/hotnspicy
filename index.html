@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOT N Spicy | Premium Restaurant & Delivery in Islamabad</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#DC2626',
+                            darkred: '#991B1B',
+                            dark: '#0A0A0A',
+                            card: '#141414',
+                            border: '#262626',
+                            gold: '#F59E0B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-red {
+            box-shadow: 0 0 35px rgba(220, 38, 38, 0.35);
+        }
+        .glow-gold {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
+        }
+        /* Hide scrollbar for chrome, safari and opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-100 min-h-screen selection:bg-brand-red selection:text-white">
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 ease-out bg-zinc-900 border border-brand-red/50 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-3">
+        <div id="toast-icon" class="text-brand-red text-xl"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+            <h4 id="toast-title" class="font-bold text-sm">Success</h4>
+            <p id="toast-msg" class="text-xs text-zinc-400">Item added to your cart</p>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-brand-dark/90 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo / DP -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-brand-red p-0.5 flex items-center justify-center glow-red transition-transform group-hover:scale-105 bg-black">
+                    <img src="hotnspicy.jpeg" alt="Hot N Spicy Logo" class="w-full h-full object-cover rounded-full">
+                </div>
+                <div>
+                    <span class="text-xl sm:text-2xl font-black tracking-wider bg-gradient-to-r from-white via-zinc-200 to-brand-red bg-clip-text text-transparent">HOT N SPICY</span>
+                    <span class="block text-[10px] tracking-widest text-brand-gold uppercase font-semibold">Islamabad • 10% OFF</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-zinc-300">
+                <a href="#deals" class="hover:text-brand-red transition-colors">Hot Deals</a>
+                <a href="#menu" class="hover:text-brand-red transition-colors">Full Menu</a>
+                <a href="#about" class="hover:text-brand-red transition-colors">About</a>
+                <a href="#contact" class="hover:text-brand-red transition-colors">Contact</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center space-x-4">
+                <!-- Cart Button -->
+                <button onclick="toggleCartModal(true)" class="relative bg-zinc-900 border border-brand-border hover:border-brand-red px-4 py-2.5 rounded-xl flex items-center space-x-2 transition-all group">
+                    <i class="fa-solid fa-bag-shopping text-brand-red group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-semibold hidden sm:inline">Cart</span>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-brand-red text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
+                </button>
+
+                <!-- Mobile Menu Toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-zinc-300 hover:text-white p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-zinc-950 border-b border-brand-border px-6 py-4 space-y-3">
+            <a href="#deals" onclick="toggleMobileMenu()" class="block text-zinc-300 hover:text-white font-medium py-1">Hot Deals</a>
+            <a href="#menu" onclick="toggleMobileMenu()" class="block text-zinc-300 hover:text-white font-medium py-1">Full Menu</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block text-zinc-300 hover:text-white font-medium py-1">About</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block text-zinc-300 hover:text-white font-medium py-1">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden pt-12 pb-20 lg:py-24 bg-gradient-to-b from-zinc-950 via-zinc-900 to-brand-dark border-b border-brand-border">
+        <!-- Background Glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-brand-red/10 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/5 blur-[150px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Hero Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-brand-red/10 border border-brand-red/30 px-4 py-1.5 rounded-full text-brand-red text-xs font-bold uppercase tracking-widest glow-red animate-pulse">
+                        <i class="fa-solid fa-fire"></i>
+                        <span>Flat 10% Discount on All Orders</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none">
+                        SAVOR THE <span class="bg-gradient-to-r from-brand-red via-red-500 to-amber-500 bg-clip-text text-transparent">ULTIMATE</span> SPICE.
+                    </h1>
+
+                    <p class="text-zinc-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0">
+                        From sizzling BBQ Platters and aromatic Chinese delicacies to crispy Broasts and loaded Zinger Rolls. Experience Islamabad's finest fast food and desi flavors delivered hot to your doorstep.
+                    </p>
+
+                    <!-- Timings & Info Pill -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                        <div class="flex items-center space-x-3 bg-zinc-900/90 border border-brand-border px-4 py-3 rounded-2xl">
+                            <div class="w-10 h-10 rounded-xl bg-brand-red/20 text-brand-red flex items-center justify-center">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] uppercase text-zinc-400 font-semibold tracking-wider">Opening Hours</p>
+                                <p class="text-sm font-bold text-white">10:00 AM – Late Night 4:00 AM</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 bg-zinc-900/90 border border-brand-border px-4 py-3 rounded-2xl">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center">
+                                <i class="fa-solid fa-motorcycle"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-[10px] uppercase text-zinc-400 font-semibold tracking-wider">Delivery</p>
+                                <p class="text-sm font-bold text-white">Free Home Delivery</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Call To Actions -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#deals" class="w-full sm:w-auto bg-gradient-to-r from-brand-red to-red-700 hover:from-red-600 hover:to-red-800 text-white font-bold px-8 py-4 rounded-2xl shadow-lg glow-red transition-all flex items-center justify-center space-x-3">
+                            <span>Explore Hot Deals</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#menu" class="w-full sm:w-auto bg-zinc-900 hover:bg-zinc-800 border border-brand-border text-white font-semibold px-8 py-4 rounded-2xl transition-all flex items-center justify-center space-x-3">
+                            <i class="fa-solid fa-utensils text-brand-gold"></i>
+                            <span>View Full Menu</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Hero Card / Banner -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-red to-amber-500 rounded-3xl blur-lg opacity-30 animate-pulse"></div>
+                        <div class="relative glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                            <div class="flex justify-between items-center border-b border-zinc-800 pb-4">
+                                <div>
+                                    <h3 class="text-lg font-bold">Hot N Spicy Special</h3>
+                                    <p class="text-xs text-zinc-400">Civic Center, Jinnah Garden, Islamabad</p>
+                                </div>
+                                <span class="bg-brand-red text-white text-xs font-black px-3 py-1 rounded-full">10% OFF</span>
+                            </div>
+
+                            <!-- Phone Contacts -->
+                            <div class="space-y-3">
+                                <a href="tel:03181839828" class="flex items-center space-x-3 p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 transition-colors">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] text-zinc-400 uppercase font-semibold">Hotline 1</p>
+                                        <p class="text-sm font-bold text-white tracking-wider">0318-1839828</p>
+                                    </div>
+                                </a>
+
+                                <a href="tel:03325236228" class="flex items-center space-x-3 p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 transition-colors">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] text-zinc-400 uppercase font-semibold">Hotline 2</p>
+                                        <p class="text-sm font-bold text-white tracking-wider">0332-5236228</p>
+                                    </div>
+                                </a>
+
+                                <a href="tel:03305594140" class="flex items-center space-x-3 p-3 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 transition-colors">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] text-zinc-400 uppercase font-semibold">Hotline 3</p>
+                                        <p class="text-sm font-bold text-white tracking-wider">0330-5594140</p>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="pt-2 text-center text-xs text-zinc-500">
+                                <i class="fa-solid fa-location-dot text-brand-red mr-1"></i> Shop#1-2, Ground Floor, Al-Moeed Plaza, Islamabad
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hot Deals Section -->
+    <section id="deals" class="py-20 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <div class="inline-flex items-center space-x-2 text-brand-red font-bold text-xs uppercase tracking-widest mb-2">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Special Promotions</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-black tracking-tight">HOT DEALS</h2>
+                </div>
+                <p class="text-zinc-400 text-sm max-w-md mt-2 md:mt-0">
+                    Handcrafted value combos designed to satisfy your biggest cravings at unbeatable pocket-friendly prices.
+                </p>
+            </div>
+
+            <!-- Deals Grid -->
+            <div id="deals-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Full Menu Section -->
+    <section id="menu" class="py-20 bg-zinc-950 border-t border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Our Culinary Offerings</span>
+                <h2 class="text-3xl sm:text-5xl font-black tracking-tight mt-2">EXPLORE FULL MENU</h2>
+                <p class="text-zinc-400 text-sm mt-3">From traditional BBQ skewers and rich Karahis to Chinese delicacies, rolls, and soups.</p>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="space-y-6 mb-10">
+                <!-- Search Box -->
+                <div class="max-w-md mx-auto relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="menu-search" oninput="filterMenu()" placeholder="Search burgers, rolls, BBQ, karahi..." class="w-full bg-zinc-900 border border-zinc-800 focus:border-brand-red text-white text-sm rounded-2xl pl-11 pr-4 py-3.5 focus:outline-none transition-all shadow-inner">
+                </div>
+
+                <!-- Category Tabs (Horizontal Scrollable) -->
+                <div class="flex items-center space-x-2 overflow-x-auto pb-2 no-scrollbar justify-start lg:justify-center">
+                    <button onclick="setCategory('all')" id="cat-btn-all" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-brand-red text-white shadow-lg glow-red">All Items</button>
+                    <button onclick="setCategory('platters')" id="cat-btn-platters" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Platters</button>
+                    <button onclick="setCategory('chicken-roll')" id="cat-btn-chicken-roll" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Chicken Rolls</button>
+                    <button onclick="setCategory('malai-roll')" id="cat-btn-malai-roll" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Malai Rolls</button>
+                    <button onclick="setCategory('zinger-roll')" id="cat-btn-zinger-roll" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Zinger Rolls</button>
+                    <button onclick="setCategory('sixer-roll')" id="cat-btn-sixer-roll" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Sixer Rolls</button>
+                    <button onclick="setCategory('fast-food')" id="cat-btn-fast-food" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Fast Foods</button>
+                    <button onclick="setCategory('chicken-bbq')" id="cat-btn-chicken-bbq" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Chicken BBQ</button>
+                    <button onclick="setCategory('chicken-karahi')" id="cat-btn-chicken-karahi" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Chicken Karahi</button>
+                    <button onclick="setCategory('chinese-foods')" id="cat-btn-chinese-foods" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Chinese Foods</button>
+                    <button onclick="setCategory('chicken-broast')" id="cat-btn-chicken-broast" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Broast & Wings</button>
+                    <button onclick="setCategory('soup-pasta-shawarma')" id="cat-btn-soup-pasta-shawarma" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Soup, Pasta & Shawarma</button>
+                    <button onclick="setCategory('fries')" id="cat-btn-fries" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800">Fries & Wraps</button>
+                </div>
+            </div>
+
+            <!-- Menu Grid -->
+            <div id="menu-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About & Location Section -->
+    <section id="about" class="py-20 bg-brand-dark border-t border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center space-x-2 text-brand-red font-bold text-xs uppercase tracking-widest">
+                        <i class="fa-solid fa-crown"></i>
+                        <span>Islamabad's Favorite Destination</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-black tracking-tight">HOT N SPICY ISLAMABAD</h2>
+                    <p class="text-zinc-400 text-base leading-relaxed">
+                        Located at the heart of Civic Center in Jinnah Garden, Hot N Spicy offers an unmatched dining and delivery experience. From our signature charcoal-grilled BBQ platters and succulent Chicken Karahis to midnight cravings served until 4:00 AM, we guarantee authentic taste and premium quality.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div class="glass-panel p-4 rounded-2xl border border-zinc-800">
+                            <h4 class="text-2xl font-black text-brand-gold">10%</h4>
+                            <p class="text-xs text-zinc-400 font-medium mt-1">Discount on All Items</p>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl border border-zinc-800">
+                            <h4 class="text-2xl font-black text-brand-red">4:00 AM</h4>
+                            <p class="text-xs text-zinc-400 font-medium mt-1">Late Night Delivery</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-brand-red to-amber-500 rounded-3xl blur-lg opacity-20"></div>
+                    <div class="relative glass-panel p-8 rounded-3xl space-y-6 border border-brand-border">
+                        <h3 class="text-xl font-bold border-b border-zinc-800 pb-4 flex items-center space-x-3">
+                            <i class="fa-solid fa-map-location-dot text-brand-red"></i>
+                            <span>Store Location & Contact</span>
+                        </h3>
+                        <div class="space-y-4 text-sm text-zinc-300">
+                            <div class="flex items-start space-x-3">
+                                <i class="fa-solid fa-location-dot text-brand-red mt-1"></i>
+                                <div>
+                                    <strong class="text-white block">Address</strong>
+                                    <span>Shop#1-2, Ground Floor, Al-Moeed Plaza, Civic Center, Jinnah Garden, Islamabad</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fa-solid fa-phone text-emerald-400 mt-1"></i>
+                                <div>
+                                    <strong class="text-white block">Hotlines</strong>
+                                    <span class="block">0318-1839828 | 0332-5236228 | 0330-5594140</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fa-solid fa-clock text-brand-gold mt-1"></i>
+                                <div>
+                                    <strong class="text-white block">Timing</strong>
+                                    <span>Open Everyday: 10:00 AM to Late Night 4:00 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-zinc-950 border-t border-brand-border py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full overflow-hidden border border-brand-red flex items-center justify-center bg-black">
+                        <img src="hotnspicy.jpeg" alt="Hot N Spicy Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-lg font-black tracking-wider text-white">HOT N SPICY</span>
+                </div>
+                <div class="text-center text-xs text-zinc-500">
+                    © 2026 Hot N Spicy Islamabad. All Rights Reserved. Free Home Delivery Available.
+                </div>
+                <div class="flex justify-md-end justify-center space-x-4">
+                    <a href="tel:03181839828" class="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-brand-red hover:border-brand-red transition-all">
+                        <i class="fa-solid fa-phone"></i>
+                    </a>
+                    <a href="#menu" class="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-brand-red hover:border-brand-red transition-all">
+                        <i class="fa-solid fa-utensils"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Slide-Over / Modal -->
+    <div id="cart-modal" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity" onclick="toggleCartModal(false)"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-zinc-950 border-l border-brand-border flex flex-col shadow-2xl">
+                <!-- Cart Header -->
+                <div class="p-6 border-b border-zinc-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-bag-shopping text-brand-red"></i>
+                        <h3 class="text-lg font-bold">Your Order Cart</h3>
+                    </div>
+                    <button onclick="toggleCartModal(false)" class="text-zinc-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items List -->
+                <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Cart Footer & Checkout -->
+                <div class="p-6 border-t border-zinc-800 bg-zinc-900/50 space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm text-zinc-400">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal">Rs. 0</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-zinc-400">
+                            <span>Delivery</span>
+                            <span class="text-emerald-400 font-semibold">FREE</span>
+                        </div>
+                        <div class="flex justify-between text-base font-bold text-white border-t border-zinc-800 pt-2">
+                            <span>Total</span>
+                            <span id="cart-total" class="text-brand-gold">Rs. 0</span>
+                        </div>
+                    </div>
+
+                    <button onclick="openCheckoutModal()" class="w-full bg-gradient-to-r from-brand-red to-red-700 hover:from-red-600 hover:to-red-800 text-white font-bold py-3.5 rounded-2xl shadow-lg glow-red transition-all flex items-center justify-center space-x-2">
+                        <span>Proceed to Checkout</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCheckoutModal()"></div>
+        <div class="relative glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 space-y-6 border border-brand-border z-10 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-4">
+                <div>
+                    <h3 class="text-xl font-bold">Complete Your Order</h3>
+                    <p class="text-xs text-zinc-400">Free Home Delivery in Islamabad</p>
+                </div>
+                <button onclick="closeCheckoutModal()" class="text-zinc-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-zinc-400 mb-1">Full Name</label>
+                    <input type="text" id="cust-name" required placeholder="Enter your full name" class="w-full bg-zinc-900 border border-zinc-800 focus:border-brand-red text-white text-sm rounded-xl px-4 py-3 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-zinc-400 mb-1">Phone Number</label>
+                    <input type="tel" id="cust-phone" required placeholder="e.g. 03001234567" class="w-full bg-zinc-900 border border-zinc-800 focus:border-brand-red text-white text-sm rounded-xl px-4 py-3 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-zinc-400 mb-1">Delivery Address (Islamabad)</label>
+                    <textarea id="cust-address" required rows="3" placeholder="Enter street, house/flat no., sector/area..." class="w-full bg-zinc-900 border border-zinc-800 focus:border-brand-red text-white text-sm rounded-xl px-4 py-3 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-zinc-400 mb-1">Payment Method</label>
+                    <select id="cust-payment" class="w-full bg-zinc-900 border border-zinc-800 focus:border-brand-red text-white text-sm rounded-xl px-4 py-3 focus:outline-none">
+                        <option value="COD">Cash on Delivery (COD)</option>
+                        <option value="Online">Online Bank Transfer / JazzCash / Easypaisa</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Confirm Order Now</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Order Modal -->
+    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="relative glass-panel w-full max-w-md rounded-3xl p-8 text-center space-y-6 border border-brand-border z-10 shadow-2xl">
+            <div class="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-3xl animate-bounce">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-black text-white">Order Placed Successfully!</h3>
+                <p class="text-sm text-zinc-400 mt-2">Thank you for ordering from <span class="text-brand-red font-bold">Hot N Spicy</span>. Your food is being freshly prepared and will be delivered shortly.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 space-y-1 text-left">
+                <p><strong>Order ID:</strong> <span id="success-order-id">#HNS-8849</span></p>
+                <p><strong>Delivery:</strong> Free Home Delivery in Islamabad</p>
+                <p><strong>Hotline Support:</strong> 0318-1839828</p>
+            </div>
+            <button onclick="closeSuccessModal()" class="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all">
+                Back to Menu
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Data and Application Logic -->
+    <script>
+        // Data derived from provided menu images
+        const dealsData = [
+            { id: 'deal-1', name: 'Deal 1', desc: '2x Zinger Burger, 2x Fries, 2x Cold Drink', price: 1350, badge: 'HOT DEAL' },
+            { id: 'deal-2', name: 'Deal 2', desc: '1x Chicken Tikka, 1x Mayo Roll, 1x Paratha, 1x Regular Drink', price: 750, badge: 'HOT DEAL' },
+            { id: 'deal-3', name: 'Deal 3', desc: '1x Chicken Burger, 1x Malae Roll, 1x Fries, 1x Regular Drink', price: 920, badge: 'HOT DEAL' },
+            { id: 'deal-4', name: 'Deal 4', desc: '1x Zinger Burger, 1x Chicken Roll, 1x Regular Drink', price: 730, badge: 'HOT DEAL' },
+            { id: 'deal-5', name: 'Deal 5', desc: '1x Chicken Boti Plate, 1x Mayo Roll, 1x Nan, 1x Regular Drink', price: 800, badge: 'HOT DEAL' },
+            { id: 'deal-6', name: 'Deal 6', desc: '5x Jumbo Roll, 1x 1.5Ltr Cold Drink', price: 2100, badge: 'HOT DEAL' },
+            { id: 'deal-7', name: 'Deal 7', desc: '1x Regular Roll, 1x Fries, 1x Regular Drink', price: 550, badge: 'HOT DEAL' },
+            { id: 'deal-8', name: 'Deal 8', desc: '5x Boom Boom, 1x 1.5Ltr Cold Drink', price: 2400, badge: 'HOT DEAL' },
+            { id: 'deal-9', name: 'Deal 9', desc: '5x Mayo Roll, 1x 1.5Ltr Cold Drink', price: 1550, badge: 'HOT DEAL' },
+            { id: 'deal-10', name: 'Deal 10', desc: '1x Grill Burger, 1x Mayo Roll, 1x Regular Drink', price: 800, badge: 'HOT DEAL' },
+            { id: 'deal-11', name: 'Deal 11', desc: '1x Chicken Boti, 1x Bihari Boti, 2x Paratha, 1x Regular Drink', price: 700, badge: 'HOT DEAL' },
+            { id: 'deal-12', name: 'Deal 12', desc: '1x Malai Boti, 1x Seekh Kabab, 2x Paratha, 1x Regular Drink', price: 680, badge: 'HOT DEAL' },
+            { id: 'deal-13', name: 'Deal 13', desc: '1x Zinger Burger, 1x Fries, 1x Regular Drink', price: 700, badge: 'HOT DEAL' }
+        ];
+
+        const menuData = [
+            // Platters
+            { id: 'plat-1', category: 'platters', name: 'BBQ Platter 1 (For 2 Person)', desc: 'Chicken Kabab, Chicken Malai Boti, Chicken Boti, Turkish Kabab, Bihari Boti, Drink, Raita + Salad, Rice', price: 1720, badge: 'BBQ PLATTER' },
+            { id: 'plat-2', category: 'platters', name: 'BBQ Platter 2 (For 5 Person)', desc: 'Chicken Kabab, Malai Boti, Chicken Boti, Turkish Kabab, Chicken Tikka, Bihari Boti, Turkish Kabab Drink, Raita + Salad, Rice', price: 4500, badge: 'BBQ PLATTER' },
+            { id: 'plat-3', category: 'platters', name: 'Chinese Platter 1 (For 2 Person)', desc: 'Chinese Rice, Sweet Sour Chicken, Chowmien, Tempura Chicken, 1x Mint Margrita', price: 1620, badge: 'CHINESE PLATTER' },
+            { id: 'plat-4', category: 'platters', name: 'Chinese Platter 2 (For 2 Person)', desc: 'Chinese Rice, Manchurian, Chowmien, Tempura Chicken, 1x Mint Margrita', price: 1620, badge: 'CHINESE PLATTER' },
+
+            // Chicken Rolls
+            { id: 'c-roll-1', category: 'chicken-roll', name: 'Chicken Mayo Roll', desc: 'Juicy chicken chunks wrapped with special mayo.', price: 315, badge: 'CHICKEN ROLL' },
+            { id: 'c-roll-2', category: 'chicken-roll', name: 'Chicken Cheese Roll', desc: 'Wrapped with melted cheese and tender chicken.', price: 345, badge: 'CHICKEN ROLL' },
+            { id: 'c-roll-3', category: 'chicken-roll', name: 'Chicken Jumbo Roll', desc: 'Extra large portion for big appetite.', price: 420, badge: 'CHICKEN ROLL' },
+            { id: 'c-roll-4', category: 'chicken-roll', name: 'Chicken Jumbo Cheese Roll', desc: 'Jumbo chicken roll loaded with extra cheese.', price: 470, badge: 'CHICKEN ROLL' },
+            { id: 'c-roll-5', category: 'chicken-roll', name: 'Chicken Boom Boom Roll', desc: 'Signature boom boom spicy sauce and chicken.', price: 490, badge: 'CHICKEN ROLL' },
+            { id: 'c-roll-6', category: 'chicken-roll', name: 'Chicken Boom Boom Cheese Roll', desc: 'Boom boom roll topped with heavy cheese.', price: 540, badge: 'CHICKEN ROLL' },
+
+            // Malai Rolls
+            { id: 'm-roll-1', category: 'malai-roll', name: 'Chicken Malai Roll', desc: 'Creamy malai boti wrapped in soft paratha.', price: 345, badge: 'MALAI ROLL' },
+            { id: 'm-roll-2', category: 'malai-roll', name: 'Chicken Malai Cheese Roll', desc: 'Malai roll with rich melted cheese.', price: 375, badge: 'MALAI ROLL' },
+            { id: 'm-roll-3', category: 'malai-roll', name: 'Chicken Malai Jumbo Roll', desc: 'Jumbo size malai boti roll.', price: 445, badge: 'MALAI ROLL' },
+            { id: 'm-roll-4', category: 'malai-roll', name: 'Chicken Malai Jumbo Cheese Roll', desc: 'Jumbo malai cheese perfection.', price: 495, badge: 'MALAI ROLL' },
+            { id: 'm-roll-5', category: 'malai-roll', name: 'Chicken Malai Boom Boom', desc: 'Spicy twist to creamy malai roll.', price: 525, badge: 'MALAI ROLL' },
+            { id: 'm-roll-6', category: 'malai-roll', name: 'Chicken Malai Boom Boom Cheese', desc: 'Ultimate creamy and cheesy roll.', price: 545, badge: 'MALAI ROLL' },
+
+            // Zinger Rolls
+            { id: 'z-roll-1', category: 'zinger-roll', name: 'Chicken Zinger Roll', desc: 'Crispy zinger fillet wrapped with salad and sauce.', price: 355, badge: 'ZINGER ROLL' },
+            { id: 'z-roll-2', category: 'zinger-roll', name: 'Chicken Zinger Cheese Roll', desc: 'Zinger roll loaded with cheddar cheese.', price: 385, badge: 'ZINGER ROLL' },
+            { id: 'z-roll-3', category: 'zinger-roll', name: 'Chicken Zinger Jumbo Roll', desc: 'Extra large zinger strip roll.', price: 445, badge: 'ZINGER ROLL' },
+            { id: 'z-roll-4', category: 'zinger-roll', name: 'Chicken Zinger Jumbo Cheese Roll', desc: 'Jumbo zinger with rich cheese.', price: 485, badge: 'ZINGER ROLL' },
+            { id: 'z-roll-5', category: 'zinger-roll', name: 'Chicken Zinger Boom Boom', desc: 'Spicy boom boom sauce with zinger fillet.', price: 445, badge: 'ZINGER ROLL' },
+            { id: 'z-roll-6', category: 'zinger-roll', name: 'Chicken Zinger Boom Boom Cheese', desc: 'Boom boom zinger with cheese.', price: 575, badge: 'ZINGER ROLL' },
+
+            // Sixer Rolls
+            { id: 's-roll-1', category: 'sixer-roll', name: 'Chicken Sixer Roll', desc: 'Massive sixer roll loaded with chicken.', price: 700, badge: 'SIXER ROLL' },
+            { id: 's-roll-2', category: 'sixer-roll', name: 'Chicken Cheese Sixer Roll', desc: 'Sixer roll with extra cheese layer.', price: 750, badge: 'SIXER ROLL' },
+            { id: 's-roll-3', category: 'sixer-roll', name: 'Malai Sixer Roll', desc: 'Creamy malai boti in sixer roll style.', price: 730, badge: 'SIXER ROLL' },
+            { id: 's-roll-4', category: 'sixer-roll', name: 'Malai Cheese Sixer Roll with Cheese', desc: 'Luxurious malai and cheese sixer.', price: 780, badge: 'SIXER ROLL' },
+
+            // Fast Foods & Burgers
+            { id: 'ff-1', category: 'fast-food', name: 'Chicken Zinger Burger', desc: 'Crispy fried chicken breast fillet in bun.', price: 400, badge: 'BURGER' },
+            { id: 'ff-2', category: 'fast-food', name: 'Zinger Burger with Cheese', desc: 'Zinger burger with slice of cheese.', price: 450, badge: 'BURGER' },
+            { id: 'ff-3', category: 'fast-food', name: 'Chicken Grill Burger', desc: 'Grilled tender chicken patty.', price: 450, badge: 'BURGER' },
+            { id: 'ff-4', category: 'fast-food', name: 'Chicken Grill Burger with Cheese', desc: 'Grilled chicken burger with cheese.', price: 500, badge: 'BURGER' },
+            { id: 'ff-5', category: 'fast-food', name: 'Chicken Burger', desc: 'Classic chicken patty burger.', price: 400, badge: 'BURGER' },
+            { id: 'ff-6', category: 'fast-food', name: 'Chicken Cheese Burger', desc: 'Classic burger with cheese.', price: 400, badge: 'BURGER' },
+            { id: 'ff-7', category: 'fast-food', name: 'Tikka Burger', desc: 'Flavorful tikka spiced burger.', price: 350, badge: 'BURGER' },
+            { id: 'ff-8', category: 'fast-food', name: 'Double Decker Burger', desc: 'Two patties packed with flavor.', price: 700, badge: 'BURGER' },
+            { id: 'ff-9', category: 'fast-food', name: 'Stick Zinger Burger', desc: 'Crispy chicken strips burger.', price: 700, badge: 'BURGER' },
+            { id: 'ff-10', category: 'fast-food', name: 'Crispy Patty Burger', desc: 'Crunchy golden patty burger.', price: 400, badge: 'BURGER' },
+
+            // Chicken BBQ
+            { id: 'bbq-1', category: 'chicken-bbq', name: 'Chicken Tikka Leg', desc: 'Juicy charcoal grilled chicken leg piece.', price: 350, badge: 'BBQ' },
+            { id: 'bbq-2', category: 'chicken-bbq', name: 'Chicken Tikka Chest', desc: 'Smoky spiced chicken chest piece.', price: 380, badge: 'BBQ' },
+            { id: 'bbq-3', category: 'chicken-bbq', name: 'Chicken Boti Bonless (10-Pcs)', desc: 'Tender boneless chicken boti skewers.', price: 450, badge: 'BBQ' },
+            { id: 'bbq-4', category: 'chicken-bbq', name: 'Chicken Malai Boti (10-Pcs)', desc: 'Melt-in-mouth creamy malai boti.', price: 490, badge: 'BBQ' },
+            { id: 'bbq-5', category: 'chicken-bbq', name: 'Chicken Reshmi Kabab (4-Pcs)', desc: 'Smooth minced chicken reshmi kababs.', price: 480, badge: 'BBQ' },
+            { id: 'bbq-6', category: 'chicken-bbq', name: 'Chicken Gola Kabab (6-Pcs)', desc: 'Spiced spherical gola kababs.', price: 560, badge: 'BBQ' },
+            { id: 'bbq-7', category: 'chicken-bbq', name: 'Chicken Bihari Boti', desc: 'Authentic Bihari spiced boti.', price: 550, badge: 'BBQ' },
+            { id: 'bbq-8', category: 'chicken-bbq', name: 'Chicken Green Boti (10-Pcs)', desc: 'Herbed green marinade boti.', price: 550, badge: 'BBQ' },
+            { id: 'bbq-9', category: 'chicken-bbq', name: 'Beef Kabab (6-Pcs)', desc: 'Juicy minced beef skewers.', price: 700, badge: 'BBQ' },
+
+            // Chicken Karahi
+            { id: 'kar-1', category: 'chicken-karahi', name: 'Chicken Karahi (Half / Full)', desc: 'Traditional tomato and pepper wok karahi.', price: 990, badge: 'KARAHI' },
+            { id: 'kar-2', category: 'chicken-karahi', name: 'Chicken Makhni Karahi (Half / Full)', desc: 'Rich buttery tomato karahi.', price: 1090, badge: 'KARAHI' },
+            { id: 'kar-3', category: 'chicken-karahi', name: 'Chicken White Karahi (Half / Full)', desc: 'Creamy yogurt and black pepper karahi.', price: 1090, badge: 'KARAHI' },
+            { id: 'kar-4', category: 'chicken-karahi', name: 'Chicken Achari Karahi (Half / Full)', desc: 'Pickle spiced tangy karahi.', price: 1090, badge: 'KARAHI' },
+            { id: 'kar-5', category: 'chicken-karahi', name: 'Peshawari Karahi (Half / Full)', desc: 'Authentic tomato and salt Peshawar style.', price: 1090, badge: 'KARAHI' },
+            { id: 'kar-6', category: 'chicken-karahi', name: 'Lahori Spicy Karahi (Half / Full)', desc: 'Extra spicy Lahori karahi.', price: 1090, badge: 'KARAHI' },
+            { id: 'kar-7', category: 'chicken-karahi', name: 'Green Handi (Half / Full)', desc: 'Creamy green herb handi.', price: 1100, badge: 'HANDI' },
+
+            // Chinese Foods
+            { id: 'ch-1', category: 'chinese-foods', name: 'Chicken Chilli Dry with Rice', desc: 'Spicy sliced chicken with green chillies & rice.', price: 775, badge: 'CHINESE' },
+            { id: 'ch-2', category: 'chinese-foods', name: 'Chicken Manchurian with Rice', desc: 'Classic tangy manchurian sauce with fried rice.', price: 775, badge: 'CHINESE' },
+            { id: 'ch-3', category: 'chinese-foods', name: 'Chicken Shashlik with Rice', desc: 'Chicken, capsicum, tomato shashlik gravy with rice.', price: 775, badge: 'CHINESE' },
+            { id: 'ch-4', category: 'chinese-foods', name: 'Egg Fried Rice', desc: 'Wok tossed fragrant rice with eggs and vegetables.', price: 445, badge: 'CHINESE' },
+            { id: 'ch-5', category: 'chinese-foods', name: 'Chicken Fried Rice', desc: 'Fried rice with tender shredded chicken.', price: 545, badge: 'CHINESE' },
+            { id: 'ch-6', category: 'chinese-foods', name: 'Chicken Chowmein (Regular / Large)', desc: 'Stir fried noodles with chicken and vegetables.', price: 650, badge: 'CHINESE' },
+
+            // Chicken Broast
+            { id: 'br-1', category: 'chicken-broast', name: 'Chicken Broast (Full)', desc: 'Full crispy fried chicken pieces with fries and sauce.', price: 1850, badge: 'BROAST' },
+            { id: 'br-2', category: 'chicken-broast', name: 'Chicken Broast (Half)', desc: 'Half portion crispy golden broast.', price: 950, badge: 'BROAST' },
+            { id: 'br-3', category: 'chicken-broast', name: 'Chicken Broast (Qtr)', desc: 'Quarter portion crispy broast.', price: 500, badge: 'BROAST' },
+            { id: 'br-4', category: 'chicken-broast', name: 'Chicken Wings (6-Pcs)', desc: 'Crispy fried spicy chicken wings.', price: 600, badge: 'WINGS' },
+
+            // Soup, Pasta & Shawarma
+            { id: 's-1', category: 'soup-pasta-shawarma', name: 'Chicken Corn Soup (Half / Full)', desc: 'Warm comforting chicken and corn soup.', price: 400, badge: 'SOUP' },
+            { id: 's-2', category: 'soup-pasta-shawarma', name: 'Hot N Sour Soup (Half / Full)', desc: 'Spicy and tangy traditional soup.', price: 400, badge: 'SOUP' },
+            { id: 's-3', category: 'soup-pasta-shawarma', name: 'Alfredo Pasta', desc: 'Creamy white sauce pasta with mushrooms and chicken.', price: 750, badge: 'PASTA' },
+            { id: 's-4', category: 'soup-pasta-shawarma', name: 'Creamy Mushroom Pasta', desc: 'Rich mushroom sauce pasta.', price: 650, badge: 'PASTA' },
+            { id: 's-5', category: 'soup-pasta-shawarma', name: 'Chicken Shawarma', desc: 'Classic middle eastern pita shawarma.', price: 250, badge: 'SHAWARMA' },
+            { id: 's-6', category: 'soup-pasta-shawarma', name: 'Tikka Boti Shawarma', desc: 'Shawarma loaded with tikka boti.', price: 250, badge: 'SHAWARMA' },
+            { id: 's-7', category: 'soup-pasta-shawarma', name: 'Chicken Arabic Wrap', desc: 'Delicious arabic style wrap.', price: 400, badge: 'WRAP' },
+
+            // Fries & Sides
+            { id: 'f-1', category: 'fries', name: 'Fries (Regular / Large)', desc: 'Crispy golden French fries.', price: 220, badge: 'FRIES' },
+            { id: 'f-2', category: 'fries', name: 'BBQ Fries', desc: 'Fries dusted with spicy BBQ seasoning.', price: 300, badge: 'FRIES' },
+            { id: 'f-3', category: 'fries', name: 'Mayo Fries', desc: 'Fries drenched in special mayo dressing.', price: 250, badge: 'FRIES' },
+            { id: 'f-4', category: 'fries', name: 'Masala Fries', desc: 'Spicy masala coated fries.', price: 220, badge: 'FRIES' },
+            { id: 'f-5', category: 'fries', name: 'Chicken Loaded Fries', desc: 'Fries topped with cheese and chicken chunks.', price: 600, badge: 'FRIES' },
+            { id: 'f-6', category: 'fries', name: 'Pizza Fries', desc: 'Fries baked with pizza toppings and cheese.', price: 700, badge: 'FRIES' }
+        ];
+
+        let cart = [];
+        let currentCategory = 'all';
+
+        // Initialize application on window load
+        window.onload = function() {
+            renderDeals();
+            renderMenu();
+            updateCartUI();
+        };
+
+        // Render Hot Deals
+        function renderDeals() {
+            const container = document.getElementById('deals-container');
+            container.innerHTML = '';
+
+            dealsData.forEach(deal => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel rounded-3xl p-6 flex flex-col justify-between border border-brand-border hover:border-brand-red transition-all group';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-brand-red/20 text-brand-red text-xs font-black px-3 py-1 rounded-full uppercase">${deal.name}</span>
+                            <span class="text-xs text-brand-gold font-bold bg-brand-gold/10 px-2.5 py-1 rounded-full">${deal.badge}</span>
+                        </div>
+                        <p class="text-sm text-zinc-300 font-medium mb-6">${deal.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-zinc-800">
+                        <div>
+                            <span class="text-[10px] uppercase text-zinc-500 block font-semibold">Price</span>
+                            <span class="text-lg font-black text-white">Rs. ${deal.price}</span>
+                        </div>
+                        <button onclick="addToCart('${deal.id}', '${deal.name}', ${deal.price}, 'deal')" class="bg-zinc-900 hover:bg-brand-red text-white p-3 rounded-2xl border border-zinc-800 hover:border-brand-red transition-all shadow-md group-hover:glow-red flex items-center space-x-2">
+                            <i class="fa-solid fa-cart-plus text-sm"></i>
+                            <span class="text-xs font-bold">Add</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Render Full Menu
+        function renderMenu(filteredItems = null) {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = '';
+
+            const itemsToRender = filteredItems || menuData;
+
+            if (itemsToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-12 text-center">
+                        <i class="fa-solid fa-face-frowning text-4xl text-zinc-600 mb-3"></i>
+                        <p class="text-zinc-400 text-sm">No menu items found matching your search.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            itemsToRender.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel rounded-3xl p-6 flex flex-col justify-between border border-brand-border hover:border-brand-red transition-all group';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="font-bold text-base text-white group-hover:text-brand-red transition-colors">${item.name}</h4>
+                            <span class="text-[10px] font-black uppercase bg-zinc-900 text-brand-gold border border-zinc-800 px-2.5 py-1 rounded-full shrink-0 ml-2">${item.badge}</span>
+                        </div>
+                        <p class="text-xs text-zinc-400 mb-6 leading-relaxed">${item.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-zinc-800">
+                        <div>
+                            <span class="text-[10px] uppercase text-zinc-500 block font-semibold">Price</span>
+                            <span class="text-base font-black text-white">Rs. ${item.price}</span>
+                        </div>
+                        <button onclick="addToCart('${item.id}', '${item.name}', ${item.price}, 'menu')" class="bg-zinc-900 hover:bg-brand-red text-white p-3 rounded-2xl border border-zinc-800 hover:border-brand-red transition-all shadow-md group-hover:glow-red flex items-center space-x-2">
+                            <i class="fa-solid fa-cart-plus text-sm"></i>
+                            <span class="text-xs font-bold">Add</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Category Filtering
+        function setCategory(category) {
+            currentCategory = category;
+            
+            // Update button styles
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = 'cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800';
+            });
+            const activeBtn = document.getElementById(`cat-btn-${category}`);
+            if(activeBtn) {
+                activeBtn.className = 'cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-brand-red text-white shadow-lg glow-red';
+            }
+
+            if (category === 'all') {
+                renderMenu();
+            } else {
+                const filtered = menuData.filter(item => item.category === category);
+                renderMenu(filtered);
+            }
+        }
+
+        // Search Filtering
+        function filterMenu() {
+            const query = document.getElementById('menu-search').value.toLowerCase();
+            let filtered = menuData;
+
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(item => item.category === currentCategory);
+            }
+
+            if (query.trim() !== '') {
+                filtered = filtered.filter(item => 
+                    item.name.toLowerCase().includes(query) || 
+                    item.desc.toLowerCase().includes(query) ||
+                    item.badge.toLowerCase().includes(query)
+                );
+            }
+
+            renderMenu(filtered);
+        }
+
+        // Cart Logic
+        function addToCart(id, name, price, type) {
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({ id, name, price, qty: 1, type });
+            }
+
+            updateCartUI();
+            showToast('Added to Cart', `${name} successfully added.`);
+        }
+
+        function updateQuantity(id, change) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += change;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const container = document.getElementById('cart-items');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            badge.innerText = totalCount;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 text-zinc-500 space-y-3">
+                        <i class="fa-solid fa-basket-shopping text-4xl"></i>
+                        <p class="text-sm">Your cart is currently empty.</p>
+                    </div>
+                `;
+                subtotalEl.innerText = 'Rs. 0';
+                totalEl.innerText = 'Rs. 0';
+                return;
+            }
+
+            container.innerHTML = '';
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                subtotal += item.price * item.qty;
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-4 rounded-2xl bg-zinc-900 border border-zinc-800';
+                div.innerHTML = `
+                    <div class="space-y-1 pr-2">
+                        <h5 class="text-xs font-bold text-white">${item.name}</h5>
+                        <p class="text-xs text-brand-gold font-semibold">Rs. ${item.price} x ${item.qty}</p>
+                    </div>
+                    <div class="flex items-center space-x-2 shrink-0">
+                        <button onclick="updateQuantity('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                        <button onclick="updateQuantity('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            subtotalEl.innerText = `Rs. ${subtotal}`;
+            totalEl.innerText = `Rs. ${subtotal}`;
+        }
+
+        // Cart Modal Toggles
+        function toggleCartModal(open) {
+            const modal = document.getElementById('cart-modal');
+            if (open) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Checkout Flow
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showToast('Cart is Empty', 'Please add items before checkout.', 'error');
+                return;
+            }
+            toggleCartModal(false);
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            closeCheckoutModal();
+            
+            // Generate random order ID
+            const orderId = '#HNS-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('success-order-id').innerText = orderId;
+            document.getElementById('success-modal').classList.remove('hidden');
+
+            // Reset Cart
+            cart = [];
+            updateCartUI();
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // Toast Notification System
+        function showToast(title, msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const titleEl = document.getElementById('toast-title');
+            const msgEl = document.getElementById('toast-msg');
+            const iconEl = document.getElementById('toast-icon');
+
+            titleEl.innerText = title;
+            msgEl.innerText = msg;
+            
+            if(type === 'error') {
+                iconEl.innerHTML = '<i class="fa-solid fa-circle-exclamation text-amber-500"></i>';
+            } else {
+                iconEl.innerHTML = '<i class="fa-solid fa-circle-check text-brand-red"></i>';
+            }
+
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
